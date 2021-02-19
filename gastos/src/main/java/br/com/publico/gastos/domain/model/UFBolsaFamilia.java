@@ -9,10 +9,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UF implements Serializable {
-    private Long id;
+public class UFBolsaFamilia implements Serializable {
     private String sigla;
     private String nome;
-    Regiao  regiao;
-
 }
