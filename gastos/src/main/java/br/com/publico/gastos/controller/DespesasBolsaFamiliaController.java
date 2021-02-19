@@ -16,10 +16,10 @@ public class DespesasBolsaFamiliaController {
 
     private final BolsaFamiliaService bolsaFamiliaService;
 
-    @GetMapping("/BolsaFamilia/{ano}/{mes}/{codigoIbge}")
-    public ResponseEntity<List<GastosBolsaFamiliaResponse>> getDespesasBolsaFamilia(@PathVariable String ano, @PathVariable String mes, @PathVariable String codigoIbge) {
+    @GetMapping("/BolsaFamilia/{anoMes}/{codigoIbge}")
+    public ResponseEntity<List<GastosBolsaFamiliaResponse>> getDespesasBolsaFamilia(@PathVariable String anoMes, @PathVariable String codigoIbge) {
 
-        return ResponseEntity.ok(bolsaFamiliaService.listBolsaFamilia((ano + mes), codigoIbge));
+        return ResponseEntity.ok(bolsaFamiliaService.listBolsaFamilia(anoMes, codigoIbge));
     }
 
 }

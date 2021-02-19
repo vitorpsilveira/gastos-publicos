@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Builder
 public class GastosBolsaFamiliaResponse implements Serializable {
 
-    private String              valor;
-    private String              quantidadeBeneficiados;
+    private String                          valor;
+    private String                          quantidadeBeneficiados;
     private MinicipioBolsaFamiliaResponse   municipio;
 }

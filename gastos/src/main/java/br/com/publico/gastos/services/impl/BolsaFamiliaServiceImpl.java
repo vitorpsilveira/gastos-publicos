@@ -8,6 +8,9 @@ import br.com.publico.gastos.services.BolsaFamiliaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +23,14 @@ public class BolsaFamiliaServiceImpl implements BolsaFamiliaService {
 
     @Override
     public List<GastosBolsaFamiliaResponse> listBolsaFamilia(String anoMes, String codigoIbge) {
-        List<BolsaFamilia> covid19List = bolsaFamiliaRepository.buscarBolsaFamilia(anoMes, codigoIbge, "cd628a98add0946165e28dc947665a90");
+        List<BolsaFamilia> covid19List = new ArrayList<>();
+
+        List<String> codigosIbge = Arrays.stream(codigoIbge.split(",")).distinct().collect(Collectors.toList());
+
+        for (String codigoIbgeSeparado: codigosIbge) {
+            covid19List.add(bolsaFamiliaRepository.buscarBolsaFamilia
+                    (anoMes, codigoIbgeSeparado, "cd628a98add0946165e28dc947665a90").get(0));
+        }
 
         return covid19List.stream()
                 .map(bolsaFamiliaMapper::toResponse)
