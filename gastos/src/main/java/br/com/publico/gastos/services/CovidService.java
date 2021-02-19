@@ -4,7 +4,6 @@ import br.com.publico.gastos.domain.dto.response.GastosCovidResponse;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public interface CovidService {
