@@ -9,10 +9,9 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UF implements Serializable {
-    private Long id;
-    private String sigla;
-    private String nome;
-    Regiao  regiao;
+public class RegiaoIntermediaria implements Serializable {
 
+    private Long id;
+    private String nome;
+    UF uf;
 }

@@ -10,11 +10,11 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Data
 public class MunicipioBolsaFamilia implements Serializable {
-        private String codigoIBGE;
-        private String nomeIBGE;
-        private String nomeIBGEsemAcento;
-        private String pais;
-        private String nomeRegiao;
-        private String codigoRegiao;
-        private UF     uf;
+        private String             codigoIBGE;
+        private String             nomeIBGE;
+        private String             nomeIBGEsemAcento;
+        private String             pais;
+        private String             nomeRegiao;
+        private String             codigoRegiao;
+        private UFBolsaFamilia     uf;
 }

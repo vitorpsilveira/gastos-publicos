@@ -9,10 +9,11 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class UF implements Serializable {
+public class Municipio implements Serializable {
+
     private Long id;
-    private String sigla;
     private String nome;
-    Regiao  regiao;
+    Microrregiao microrregiao;
+    RegiaoImediata regiaoImediata;
 
 }
