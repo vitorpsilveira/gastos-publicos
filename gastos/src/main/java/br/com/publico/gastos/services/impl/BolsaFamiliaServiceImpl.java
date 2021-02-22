@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Array;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,8 +29,20 @@ public class BolsaFamiliaServiceImpl implements BolsaFamiliaService {
         List<String> codigosIbge = Arrays.stream(codigoIbge.split(",")).distinct().collect(Collectors.toList());
 
         for (String codigoIbgeSeparado: codigosIbge) {
-            covid19List.add(bolsaFamiliaRepository.buscarBolsaFamilia
-                    (anoMes, codigoIbgeSeparado, "cd628a98add0946165e28dc947665a90").get(0));
+            List<BolsaFamilia> arrayBolsaFamilia = bolsaFamiliaRepository.buscarBolsaFamilia
+                    (anoMes, codigoIbgeSeparado, "cd628a98add0946165e28dc947665a90");
+
+            if(arrayBolsaFamilia.size() > 0){
+                DecimalFormat dfDinheiro = new DecimalFormat("###,###,###,###,###.00");
+                DecimalFormat dfNumero = new DecimalFormat("###,###,###,###,###");
+                arrayBolsaFamilia.get(0).valor =
+                        "R$: ".concat(dfDinheiro.format(Double.parseDouble(arrayBolsaFamilia.get(0).valor)));
+                
+                arrayBolsaFamilia.get(0).quantidadeBeneficiados =
+                        dfNumero.format(Double.parseDouble(arrayBolsaFamilia.get(0).quantidadeBeneficiados));
+
+                covid19List.add(arrayBolsaFamilia.get(0));
+            }
         }
 
         return covid19List.stream()
