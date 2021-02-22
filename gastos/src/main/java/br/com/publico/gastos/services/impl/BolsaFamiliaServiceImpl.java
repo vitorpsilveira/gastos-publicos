@@ -36,8 +36,8 @@ public class BolsaFamiliaServiceImpl implements BolsaFamiliaService {
                 DecimalFormat dfDinheiro = new DecimalFormat("###,###,###,###,###.00");
                 DecimalFormat dfNumero = new DecimalFormat("###,###,###,###,###");
                 arrayBolsaFamilia.get(0).valor =
-                        "R$: ".concat(dfDinheiro.format(Double.parseDouble(arrayBolsaFamilia.get(0).valor)));
-                
+                        "R$ ".concat(dfDinheiro.format(Double.parseDouble(arrayBolsaFamilia.get(0).valor)));
+
                 arrayBolsaFamilia.get(0).quantidadeBeneficiados =
                         dfNumero.format(Double.parseDouble(arrayBolsaFamilia.get(0).quantidadeBeneficiados));
 
