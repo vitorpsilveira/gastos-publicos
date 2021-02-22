@@ -14,6 +14,7 @@ import java.io.Serializable;
 public class GastosBolsaFamiliaResponse implements Serializable {
 
     private String                          valor;
+    private String                          dataReferencia;
     private String                          quantidadeBeneficiados;
     private MinicipioBolsaFamiliaResponse   municipio;
 }
