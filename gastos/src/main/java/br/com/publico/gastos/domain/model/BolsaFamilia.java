@@ -10,12 +10,12 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Data
 public class BolsaFamilia implements Serializable {
-    private String                  id;
-    private String                  dataReferencia;
-    private MunicipioBolsaFamilia   municipio;
-    private Integer                 valor;
-    private Tipo                    tipo;
-    private Integer                 quantidadeBeneficiados;
+    String                  id;
+    String                  dataReferencia;
+    MunicipioBolsaFamilia   municipio;
+    public String                 valor;
+    Tipo                    tipo;
+    public String quantidadeBeneficiados;
 
 }
 
