@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class Avaliacao extends EntityBase {
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "id_avaliacao_colaborador")
+    @JoinColumn(name = "colaborador_id")
     private Colaborador colaborador;
 
     @Enumerated(EnumType.STRING)
