@@ -14,6 +14,4 @@ public class ColaboradorRequest {
 
     @NotBlank(message = "A sigla é obrigatória")
     private String sigla;
-
-    private Integer teste;
 }

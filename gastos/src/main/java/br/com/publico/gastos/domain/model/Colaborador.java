@@ -32,6 +32,4 @@ public class Colaborador extends EntityBase {
     @OneToMany(mappedBy = "colaborador")
     private List<Avaliacao> avaliacoes;
 
-    private Integer teste;
-
 }
