@@ -1,7 +1,9 @@
 package br.com.publico.gastos.domain.model;
 
 import br.com.publico.gastos.domain.model.base.EntityBase;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
@@ -13,6 +15,8 @@ import java.util.List;
 @Setter
 @Entity
 @Table(name = "colaborador", uniqueConstraints = { @UniqueConstraint(name = "unq_sigla", columnNames = "sigla") })
+@AllArgsConstructor
+@NoArgsConstructor
 public class Colaborador extends EntityBase {
 
     @NotBlank(message = "O nome é obrigatório")
