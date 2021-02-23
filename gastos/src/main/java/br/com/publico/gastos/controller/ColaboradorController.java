@@ -5,13 +5,10 @@ import br.com.publico.gastos.domain.model.Colaborador;
 import br.com.publico.gastos.repository.ColaboradorRepository;
 import br.com.publico.gastos.services.ColaboradorService;
 import br.com.publico.gastos.services.exception.DomainException;
-import br.com.publico.gastos.services.exception.NomeJaExisteException;
-import br.com.publico.gastos.services.exception.SiglaJaExisteException;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,11 +35,7 @@ public class ColaboradorController {
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Salvar e retornar status 200"),
         @ApiResponse(code = 400, message = "Requisição inválida! Erro de validação", response = DomainException.class)})
     public ResponseEntity<?> save(@RequestBody @Valid ColaboradorRequest request) {
-        try {
-            colaboradorService.salvar(request);
-            return ResponseEntity.ok().build();
-        } catch (NomeJaExisteException | SiglaJaExisteException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+        colaboradorService.salvar(request);
+        return ResponseEntity.ok().build();
     }
 }
