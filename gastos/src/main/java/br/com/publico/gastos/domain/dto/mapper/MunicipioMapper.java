@@ -8,6 +8,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface MunicipioMapper {
 
-    @Mapping(target = "uf", source = "microrregiao.mesorregiao.UF.sigla")
+    @Mapping(target = "uf", source = "microrregiao.mesorregiao.uf.sigla")
     ConsultaMunicipioResponse toResponse(Municipio municipio);
 }
