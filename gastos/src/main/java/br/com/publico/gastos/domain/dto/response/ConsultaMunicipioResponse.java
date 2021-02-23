@@ -15,5 +15,6 @@ public class ConsultaMunicipioResponse implements Serializable {
 
     private Long id;
     private String nome;
+    private String uf;
 
 }
