@@ -1,6 +1,9 @@
 package br.com.publico.gastos.domain.model;
 
 import br.com.publico.gastos.domain.model.base.EntityBase;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -9,6 +12,9 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "avaliacao")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Avaliacao extends EntityBase {
 
     @ManyToOne(optional = false)
