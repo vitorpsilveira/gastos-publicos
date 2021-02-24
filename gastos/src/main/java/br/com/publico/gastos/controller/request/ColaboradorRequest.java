@@ -9,9 +9,9 @@ import javax.validation.constraints.NotBlank;
 @Setter
 public class ColaboradorRequest {
 
-    @NotBlank(message = "O nome é obritatório")
+    @NotBlank(message = "O nome é obrigatório")
     private String nome;
 
-    @NotBlank(message = "A sigla é obritatória")
+    @NotBlank(message = "A sigla é obrigatória")
     private String sigla;
 }
