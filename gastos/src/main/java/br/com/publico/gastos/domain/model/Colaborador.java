@@ -14,12 +14,13 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "colaborador", uniqueConstraints = { @UniqueConstraint(name = "unq_sigla", columnNames = "sigla") })
+@Table(name = "colaborador")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Colaborador extends EntityBase {
 
     @NotBlank(message = "O nome é obrigatório")
+    @Length(max = 100, message = "O nome deve possuir no máximo 100 caracterres")
     @Column(length = 100)
     private String nome;
 
