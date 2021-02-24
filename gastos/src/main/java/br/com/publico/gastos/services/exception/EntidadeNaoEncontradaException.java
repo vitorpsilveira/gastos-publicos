@@ -6,7 +6,7 @@ public class EntidadeNaoEncontradaException extends DomainException {
         super(message);
     }
 
-    public EntidadeNaoEncontradaException(String colaboradorNaoEncontrado, Long colaboradorId) {
-        super(String.format(colaboradorNaoEncontrado, colaboradorId));
+    public EntidadeNaoEncontradaException(String mensagem, Long entidadeId) {
+        super(String.format(mensagem, entidadeId));
     }
 }
