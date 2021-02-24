@@ -50,23 +50,25 @@ public class ColaboradorServiceImpl implements ColaboradorService {
             throw new EntidadeNaoEncontradaException(ValidationMessage.COLABORADOR_NAO_ENCONTRADO, colaboradorId);
         }
         var colaborador = colaboradorOptional.get();
-        var nomeJaExiste = repository.findByNome(colaborador.getNome());
-        var siglaJaExiste = repository.findBySigla(colaborador.getSigla());
+        var nomeJaExiste = repository.findByNome(request.getNome());
+        var siglaJaExiste = repository.findBySigla(request.getSigla());
         if (nomeJaExiste.isPresent()) {
             if (nomeJaExiste.get().getId() != colaboradorId) {
                 throw new NomeJaExisteException(String.format(ValidationMessage.O_NOME_JA_EXISTE, nomeJaExiste.get().getNome()));
             }
-            if (StringUtils.hasText(request.getNome())) {
-                colaborador.setNome(request.getNome());
-            }
         }
         if (siglaJaExiste.isPresent()){
             if (siglaJaExiste.get().getId() != colaboradorId) {
-                throw new NomeJaExisteException(String.format(ValidationMessage.O_NOME_JA_EXISTE, nomeJaExiste.get().getNome()));
+                throw new NomeJaExisteException(String.format(ValidationMessage.A_SIGLA_JA_EXISTE, siglaJaExiste.get().getSigla()));
             }
-            if (StringUtils.hasText(request.getSigla())) {
-                colaborador.setSigla(request.getSigla());
-            }
+        }
+
+        if (StringUtils.hasText(request.getNome())) {
+            colaborador.setNome(request.getNome());
+        }
+
+        if (StringUtils.hasText(request.getSigla())) {
+            colaborador.setSigla(request.getSigla());
         }
         repository.save(colaborador);
     }
