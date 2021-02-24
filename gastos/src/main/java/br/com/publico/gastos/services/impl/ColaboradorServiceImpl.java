@@ -84,7 +84,7 @@ public class ColaboradorServiceImpl implements ColaboradorService {
         }
         var colaborador = colaboradorOptional.get();
         if (!colaborador.getAvaliacoes().isEmpty()) {
-            throw new ColaboradorPossuiAvaliacaoException(colaboradorId);
+            throw new ColaboradorPossuiAvaliacaoException(colaborador.getNome());
         }
         repository.delete(colaborador);
     }
