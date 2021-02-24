@@ -1,6 +1,5 @@
 package br.com.publico.gastos.domain.model;
 
-import br.com.publico.gastos.services.exception.EnumNaoEncontradoException;
 import lombok.Getter;
 
 @Getter

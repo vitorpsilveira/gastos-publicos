@@ -1,6 +1,7 @@
 package br.com.publico.gastos.controller;
 
 import br.com.publico.gastos.controller.request.AvaliacaoRequest;
+import br.com.publico.gastos.controller.request.AvaliacaoUpdateRequest;
 import br.com.publico.gastos.controller.swagger.SwaggerApiMessage;
 import br.com.publico.gastos.controller.swagger.SwaggerApiStatusCode;
 import br.com.publico.gastos.services.AvaliacaoService;
@@ -9,7 +10,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,9 +32,17 @@ public class AvaliacaoController {
     @ApiOperation(value = "Salvar avaliação")
     @ApiResponses(value = { @ApiResponse(code = SwaggerApiStatusCode.CODE_200, message = "Salvar e retornar status 200"),
             @ApiResponse(code = SwaggerApiStatusCode.CODE_400, message = SwaggerApiMessage.REQUISICAO_INVALIDA, response = DomainException.class)})
-    public ResponseEntity<?> save(@RequestBody @Valid AvaliacaoRequest avaliacao) {
+    public ResponseEntity<Void> save(@RequestBody @Valid AvaliacaoRequest avaliacao) {
         avaliacaoService.salvar(avaliacao);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    @PatchMapping("/{id}")
+    @ApiOperation(value = "Editar avaliação")
+    @ApiResponses(value = { @ApiResponse(code = SwaggerApiStatusCode.CODE_200, message = "Editar e retornar status 200"),
+            @ApiResponse(code = SwaggerApiStatusCode.CODE_400, message = SwaggerApiMessage.REQUISICAO_INVALIDA, response = DomainException.class)})
+    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody @Valid AvaliacaoUpdateRequest avaliacao) {
+        avaliacaoService.atualizar(id, avaliacao);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }
