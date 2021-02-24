@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -76,17 +77,30 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return super.handleHttpMessageNotReadable(ex, headers, status, request);
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<?> handleConstraintViolationExcetion(ConstraintViolationException ex, WebRequest request) {
+    @ExceptionHandler( { TransactionSystemException.class } )
+    public ResponseEntity<?> handleTransactionSystemException(Exception ex, WebRequest request) {
+        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+        Throwable causaRaiz = ExceptionUtils.getRootCause(ex.getCause());
+        if (causaRaiz instanceof ConstraintViolationException) {
+            return handleConstraintViolationException((ConstraintViolationException) causaRaiz, request);
+        }
+        Problema problema = Problema.builder()
+                .mensagem(ExceptionHandlerMessage.OCORREU_UM_ERRO_INESPERADO)
+                .codigoErro(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .build();
+        return handleExceptionInternal(ex, problema, new HttpHeaders(), badRequest, request);
+    }
+
+    public ResponseEntity<?> handleConstraintViolationException(ConstraintViolationException ex, WebRequest request) {
         HttpStatus badRequest = HttpStatus.BAD_REQUEST;
         String mensagem = ex.getConstraintViolations()
                 .stream()
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.joining(";"));
         Problema problema = Problema.builder()
-                    .codigoErro(badRequest.value())
-                    .mensagem(mensagem)
-                    .build();
+                .codigoErro(badRequest.value())
+                .mensagem(mensagem)
+                .build();
         return handleExceptionInternal(ex, problema, new HttpHeaders(), badRequest, request);
     }
 

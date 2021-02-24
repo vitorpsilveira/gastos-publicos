@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -17,6 +18,7 @@ import java.util.List;
 @Table(name = "colaborador")
 @AllArgsConstructor
 @NoArgsConstructor
+@DynamicUpdate
 public class Colaborador extends EntityBase {
 
     @NotBlank(message = "O nome é obrigatório")

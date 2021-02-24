@@ -1,11 +1,14 @@
 package br.com.publico.gastos.controller;
 
+import br.com.publico.gastos.controller.exceptionhandler.Problema;
 import br.com.publico.gastos.controller.request.ColaboradorRequest;
+import br.com.publico.gastos.controller.swagger.SwaggerApiMessage;
+import br.com.publico.gastos.controller.swagger.SwaggerApiStatusCode;
+import br.com.publico.gastos.domain.model.Colaborador;
 import br.com.publico.gastos.domain.dto.mapper.ColaboradorMapper;
 import br.com.publico.gastos.domain.dto.response.ColaboradorResponse;
 import br.com.publico.gastos.repository.ColaboradorRepository;
 import br.com.publico.gastos.services.ColaboradorService;
-import br.com.publico.gastos.services.exception.DomainException;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -43,10 +46,28 @@ public class ColaboradorController {
 
     @PostMapping
     @ApiOperation(value = "Salvar colaborador")
-    @ApiResponses(value = { @ApiResponse(code = 200, message = "Salvar e retornar status 200"),
-        @ApiResponse(code = 400, message = "Requisição inválida! Erro de validação", response = DomainException.class)})
-    public ResponseEntity<?> save(@RequestBody @Valid ColaboradorRequest request) {
+    @ApiResponses(value = { @ApiResponse(code = SwaggerApiStatusCode.CODE_200, message = "Salvar e retornar status 200"),
+        @ApiResponse(code = SwaggerApiStatusCode.CODE_400, message = SwaggerApiMessage.REQUISICAO_INVALIDA, response = Problema.class)})
+    public ResponseEntity<?> salvar(@RequestBody @Valid ColaboradorRequest request) {
         colaboradorService.salvar(request);
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("{colaboradorId}")
+    @ApiOperation(value = "Alterar o nome e a sigla do colaborador")
+    @ApiResponses(value = { @ApiResponse(code = SwaggerApiStatusCode.CODE_200, message = "Alterar e retornar status 200"),
+        @ApiResponse(code = SwaggerApiStatusCode.CODE_400, message = SwaggerApiMessage.REQUISICAO_INVALIDA, response = Problema.class)})
+    public ResponseEntity<?> alterarParcialmente(@RequestBody ColaboradorRequest request, @PathVariable Long colaboradorId) {
+        colaboradorService.alterarParcialmente(request, colaboradorId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("{colaboradorId}")
+    @ApiOperation(value = "Deletar usuário se não houver associações vinculadas a ele")
+    @ApiResponses(value = { @ApiResponse(code = SwaggerApiStatusCode.CODE_200, message = "Deletado com sucesso e retornar status 204"),
+        @ApiResponse(code = SwaggerApiStatusCode.CODE_400, message = SwaggerApiMessage.REQUISICAO_INVALIDA, response = Problema.class)})
+    public ResponseEntity deletar(@PathVariable Long colaboradorId) {
+        colaboradorService.deletar(colaboradorId);
+        return ResponseEntity.noContent().build();
     }
 }
