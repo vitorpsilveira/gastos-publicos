@@ -16,4 +16,23 @@ public enum Status {
     Status(String descricao) {
         this.descricao = descricao;
     }
+
+    public static Status fromString(final Short id) {
+        switch (id) {
+            case 1:
+                return NOVO;
+            case 2:
+                return AGENDADO;
+            case 3:
+                return FORMALIZAR;
+            case 4:
+                return EM_APROVACAO;
+            case 5:
+                return FINALIZADO;
+            case 6:
+                return DESLIGADO;
+            default:
+                return null;
+        }
+    }
 }

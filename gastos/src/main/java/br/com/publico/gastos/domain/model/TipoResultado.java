@@ -14,4 +14,19 @@ public enum TipoResultado {
     TipoResultado(String descricao) {
         this.descricao = descricao;
     }
+
+    public static TipoResultado fromString(final Short id) {
+        switch (id) {
+            case 1:
+                return MERITO;
+            case 2:
+                return PROMOCAO;
+            case 3:
+                return ADEQUACAO;
+            case 4:
+                return NA;
+            default:
+                return null;
+        }
+    }
 }

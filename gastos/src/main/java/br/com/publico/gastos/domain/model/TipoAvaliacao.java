@@ -1,5 +1,6 @@
 package br.com.publico.gastos.domain.model;
 
+import br.com.publico.gastos.services.exception.EnumNaoEncontradoException;
 import lombok.Getter;
 
 @Getter
@@ -16,5 +17,24 @@ public enum TipoAvaliacao {
 
     TipoAvaliacao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public static TipoAvaliacao fromString(final Short id) {
+        switch (id) {
+            case 1:
+                return ONE_TO_ONE;
+            case 2:
+                return INFORMAL;
+            case 3:
+                return EXPERIENCIA45D;
+            case 4:
+                return EXPERIENCIA90D;
+            case 5:
+                return RECONHECIMENTO;
+            case 6:
+                return FORMACAO;
+            default:
+                return null;
+        }
     }
 }

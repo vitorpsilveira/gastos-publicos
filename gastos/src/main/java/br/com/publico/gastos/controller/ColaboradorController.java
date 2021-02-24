@@ -3,7 +3,6 @@ package br.com.publico.gastos.controller;
 import br.com.publico.gastos.controller.request.ColaboradorRequest;
 import br.com.publico.gastos.controller.swagger.SwaggerApiMessage;
 import br.com.publico.gastos.controller.swagger.SwaggerApiStatusCode;
-import br.com.publico.gastos.domain.model.Colaborador;
 import br.com.publico.gastos.domain.dto.mapper.ColaboradorMapper;
 import br.com.publico.gastos.domain.dto.response.ColaboradorResponse;
 import br.com.publico.gastos.repository.ColaboradorRepository;
@@ -15,6 +14,8 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,6 +39,7 @@ public class ColaboradorController {
     private ColaboradorMapper colaboradorMapper;
 
     @GetMapping
+    @ApiOperation(value = "Buscar todos os colaboradores")
     public List<ColaboradorResponse> getAll() {
         return colaboradorRepository.findAll()
                 .stream().map(colaboradorMapper::colaboradorEntityToResponse)
