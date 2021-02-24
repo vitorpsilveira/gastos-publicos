@@ -3,6 +3,7 @@ package br.com.publico.gastos.services.impl;
 import br.com.publico.gastos.controller.request.AvaliacaoRequest;
 import br.com.publico.gastos.controller.request.AvaliacaoUpdateRequest;
 import br.com.publico.gastos.domain.dto.mapper.AvaliacaoMapper;
+import br.com.publico.gastos.domain.dto.response.AvaliacaoResponse;
 import br.com.publico.gastos.domain.model.Avaliacao;
 import br.com.publico.gastos.domain.model.Status;
 import br.com.publico.gastos.domain.model.TipoAvaliacao;
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class AvaliacaoServiceImpl implements AvaliacaoService {
@@ -77,5 +79,12 @@ public class AvaliacaoServiceImpl implements AvaliacaoService {
     @Override
     public void atualizar(Long id, AvaliacaoUpdateRequest avaliacaoRequest) {
         avaliacaoRepository.save(montaAvaliacao(id, avaliacaoRequest));
+    }
+
+    @Override
+    public List<AvaliacaoResponse> buscarAvaliacoes() {
+        return avaliacaoRepository.findAll()
+                .stream().map(avaliacaoMapper::avaliacaoEntityToResponse)
+                .collect(Collectors.toList());
     }
 }

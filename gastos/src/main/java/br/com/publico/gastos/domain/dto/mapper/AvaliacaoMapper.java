@@ -1,6 +1,7 @@
 package br.com.publico.gastos.domain.dto.mapper;
 
 import br.com.publico.gastos.controller.request.AvaliacaoRequest;
+import br.com.publico.gastos.domain.dto.response.AvaliacaoResponse;
 import br.com.publico.gastos.domain.model.Avaliacao;
 import br.com.publico.gastos.domain.model.Colaborador;
 import br.com.publico.gastos.domain.model.Status;
@@ -10,6 +11,19 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface AvaliacaoMapper {
+
+    default AvaliacaoResponse avaliacaoEntityToResponse(Avaliacao avaliacao) {
+        AvaliacaoResponse avaliacaoResponse = new AvaliacaoResponse();
+
+        avaliacaoResponse.setIdColaborador(avaliacao.getColaborador().getId());
+        avaliacaoResponse.setTipoAvaliacao(avaliacao.getTipoAvaliacao());
+        avaliacaoResponse.setResultado(avaliacao.getResultado());
+        avaliacaoResponse.setStatus(avaliacao.getStatus());
+        avaliacaoResponse.setData(avaliacao.getData().toString());
+        avaliacaoResponse.setNota(avaliacao.getNota());
+
+        return avaliacaoResponse;
+    }
 
     default Avaliacao avaliacaoRequestToEntity(AvaliacaoRequest request) {
         Avaliacao avaliacao = new Avaliacao();
