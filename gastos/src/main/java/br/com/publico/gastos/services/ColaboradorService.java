@@ -7,4 +7,6 @@ public interface ColaboradorService {
     void salvar(ColaboradorRequest request);
 
     void alterarParcialmente(ColaboradorRequest request, Long colaboradorId);
+
+    void deletar(Long colaboradorId);
 }
