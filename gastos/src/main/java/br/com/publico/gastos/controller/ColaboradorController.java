@@ -40,6 +40,7 @@ public class ColaboradorController {
     private ColaboradorMapper colaboradorMapper;
 
     @GetMapping
+    @ApiOperation(value = "Buscar todos os colaboradores")
     public List<ColaboradorResponse> getAll() {
         return colaboradorRepository.findAll()
                 .stream().map(colaboradorMapper::colaboradorEntityToResponse)

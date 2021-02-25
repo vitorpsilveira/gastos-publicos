@@ -7,4 +7,8 @@ public class ColaboradorPossuiAvaliacaoException extends DomainException {
     public ColaboradorPossuiAvaliacaoException(String nomeColaborador) {
         super(String.format(ValidationMessage.COLABORADOR_POSSUI_AVALIACAO, nomeColaborador));
     }
+
+    public ColaboradorPossuiAvaliacaoException(int mes) {
+        super(String.format(ValidationMessage.COLABORADOR_POSSUI_AVALIACAO_NO_MES, mes));
+    }
 }
