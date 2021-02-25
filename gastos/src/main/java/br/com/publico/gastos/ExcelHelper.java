@@ -17,8 +17,8 @@ import java.util.List;
 
 public class ExcelHelper {
     public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-    static String[] HEADERs = {"Nome", "Sigla", "Tipo Avaliação", "Data", "Status", "Nota", "Resultado"};
-    static String SHEET = "AvaliacaoTemplate";
+    static String[] HEADERs = { "Nome", "Sigla", "Tipo Avaliação", "Data", "Status", "Nota", "Resultado" };
+    static String SHEET = "Carreiras";
 
     public static boolean hasExcelFormat(MultipartFile file) {
         if (!TYPE.equals(file.getContentType())) {
@@ -34,7 +34,7 @@ public class ExcelHelper {
             Sheet sheet = workbook.getSheet(SHEET);
             Iterator<Row> rows = sheet.iterator();
 
-            List<Avaliacao> avaliacaos = new ArrayList<Avaliacao>();
+            List<Avaliacao> avaliacaoList = new ArrayList<Avaliacao>();
 
             int rowNumber = 0;
             while (rows.hasNext()) {
@@ -58,20 +58,16 @@ public class ExcelHelper {
 
                     switch (cellIdx) {
                         case 0:
-                            avaliacao.setId((long) currentCell.getNumericCellValue());
-                            break;
-
-                        case 1:
                             avaliacao.setColaborador(colaborador);
                             avaliacao.getColaborador().setNome(currentCell.getStringCellValue());
                             break;
 
-                        case 2:
+                        case 1:
                             avaliacao.setColaborador(colaborador);
                             avaliacao.getColaborador().setSigla(currentCell.getStringCellValue());
                             break;
 
-                        case 3:
+                        case 2:
                             switch (currentCell.getStringCellValue()) {
                                 case "1:1":
                                 case "AD":
@@ -101,11 +97,11 @@ public class ExcelHelper {
                             }
                             break;
 
-                        case 4:
+                        case 3:
                             avaliacao.setData(currentCell.getLocalDateTimeCellValue().toLocalDate());
                             break;
 
-                        case 5:
+                        case 4:
                             switch (currentCell.getStringCellValue()) {
                                 case "Novo":
                                     avaliacao.setStatus(Status.NOVO);
@@ -133,11 +129,11 @@ public class ExcelHelper {
                             }
                             break;
 
-                        case 6:
+                        case 5:
                             avaliacao.setNota(new BigDecimal(currentCell.getStringCellValue()));
                             break;
 
-                        case 7:
+                        case 10:
                             switch (currentCell.getStringCellValue()) {
                                 case "Mérito":
                                     avaliacao.setResultado(TipoResultado.MERITO);
@@ -164,12 +160,12 @@ public class ExcelHelper {
                     cellIdx++;
                 }
 
-                avaliacaos.add(avaliacao);
+                avaliacaoList.add(avaliacao);
             }
 
             workbook.close();
 
-            return avaliacaos;
+            return avaliacaoList;
         } catch (IOException e) {
             throw new RuntimeException("Falha ao verificar o arquivo Excel: " + e.getMessage());
         }

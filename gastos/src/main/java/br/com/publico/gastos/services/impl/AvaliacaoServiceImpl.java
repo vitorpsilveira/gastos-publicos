@@ -20,7 +20,7 @@ public class AvaliacaoServiceImpl implements AvaliacaoService {
     @Override
     public void save(MultipartFile file) {
         try {
-            List<Avaliacao> avaliacaoList = ExcelHelper.excelToAvaliacao(file.getInputStream());
+            final List<Avaliacao> avaliacaoList = ExcelHelper.excelToAvaliacao(file.getInputStream());
             avaliacaoRepository.saveAll(avaliacaoList);
         } catch (IOException e) {
             throw new RuntimeException("Falha ao armazenar dados do Excel: " + e.getMessage());

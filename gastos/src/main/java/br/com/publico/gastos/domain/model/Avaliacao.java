@@ -2,6 +2,7 @@ package br.com.publico.gastos.domain.model;
 
 import br.com.publico.gastos.domain.model.base.EntityBase;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Avaliacao extends EntityBase {
 
     @ManyToOne(optional = false)
