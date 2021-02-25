@@ -4,7 +4,8 @@ import br.com.publico.gastos.controller.exceptionhandler.Problema;
 import br.com.publico.gastos.controller.request.ColaboradorRequest;
 import br.com.publico.gastos.controller.swagger.SwaggerApiMessage;
 import br.com.publico.gastos.controller.swagger.SwaggerApiStatusCode;
-import br.com.publico.gastos.domain.model.Colaborador;
+import br.com.publico.gastos.domain.dto.mapper.ColaboradorMapper;
+import br.com.publico.gastos.domain.dto.response.ColaboradorResponse;
 import br.com.publico.gastos.repository.ColaboradorRepository;
 import br.com.publico.gastos.services.ColaboradorService;
 import io.swagger.annotations.ApiOperation;
@@ -12,10 +13,18 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("colaborador")
@@ -27,9 +36,15 @@ public class ColaboradorController {
     @Autowired
     private ColaboradorService colaboradorService;
 
+    @Autowired
+    private ColaboradorMapper colaboradorMapper;
+
     @GetMapping
-    public List<Colaborador> getAll() {
-        return colaboradorRepository.findAll();
+    @ApiOperation(value = "Buscar todos os colaboradores")
+    public List<ColaboradorResponse> getAll() {
+        return colaboradorRepository.findAll()
+                .stream().map(colaboradorMapper::colaboradorEntityToResponse)
+                .collect(Collectors.toList());
     }
 
     @PostMapping
