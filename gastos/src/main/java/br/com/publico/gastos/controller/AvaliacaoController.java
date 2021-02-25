@@ -3,6 +3,7 @@ package br.com.publico.gastos.controller;
 
 import br.com.publico.gastos.ExcelHelper;
 import br.com.publico.gastos.domain.dto.response.MensagemResponse;
+import br.com.publico.gastos.domain.model.Avaliacao;
 import br.com.publico.gastos.services.AvaliacaoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +17,9 @@ import br.com.publico.gastos.controller.request.AvaliacaoUpdateRequest;
 import br.com.publico.gastos.controller.swagger.SwaggerApiMessage;
 import br.com.publico.gastos.controller.swagger.SwaggerApiStatusCode;
 import br.com.publico.gastos.domain.dto.response.AvaliacaoResponse;
-import br.com.publico.gastos.services.AvaliacaoService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -61,6 +58,13 @@ public class AvaliacaoController {
 
         mensagem = "Por favor, adicione um arquivo Excel!";
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MensagemResponse(mensagem));
+    }
+
+    @GetMapping("/listar")
+    public ResponseEntity<List<Avaliacao>>  getAllAvaliacoes() {
+        List<Avaliacao> avaliacaoList = avaliacaoService.getAllAvaliacoes();
+
+        return new ResponseEntity<>(avaliacaoList, HttpStatus.OK);
     }
 
     @GetMapping

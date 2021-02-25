@@ -17,7 +17,7 @@ import java.util.List;
 
 public class ExcelHelper {
     public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-    static String[] HEADERs = { "Nome", "Sigla", "Tipo Avaliação", "Data", "Status", "Nota", "Resultado" };
+    static String[] HEADERs = {"Nome", "Sigla", "Tipo Avaliação", "Data", "Status", "Nota", "Resultado"};
     static String SHEET = "Carreiras";
 
     public static boolean hasExcelFormat(MultipartFile file) {
@@ -36,128 +36,160 @@ public class ExcelHelper {
 
             List<Avaliacao> avaliacaoList = new ArrayList<Avaliacao>();
 
+            String nome = "Nome";
+            int nomeIndx = 0;
+            String sigla = "Sigla";
+            int siglaIndx = 0;
+            String tipoAvaliacao = "Tipo Avaliação";
+            int tipoAvaliacaoIndx = 0;
+            String data = "Data";
+            int dataIndx = 0;
+            String status = "Status";
+            int statusIndx = 0;
+            String nota = "Nota";
+            int notaIndx = 0;
+            String resultado = "Resultado";
+            int resultadoIndx = 0;
+
             int rowNumber = 0;
             while (rows.hasNext()) {
                 Row currentRow = rows.next();
 
-                //pular cabeçalho
+
+
+                //pular cabeçalho e validar indices
                 if (rowNumber == 0) {
+
+                    Iterator<Cell> cellsInRow = currentRow.iterator();
+
+                    int cellIdx = 0;
+                    while (cellsInRow.hasNext()) {
+                        Cell currentCell = cellsInRow.next();
+
+                        if(currentCell.getStringCellValue().equalsIgnoreCase(nome)) {
+                            nomeIndx = currentCell.getColumnIndex();
+                        }
+
+                        if(currentCell.getStringCellValue().equalsIgnoreCase(sigla)) {
+                            siglaIndx = currentCell.getColumnIndex();
+                        }
+
+                        if(currentCell.getStringCellValue().equalsIgnoreCase(tipoAvaliacao)) {
+                            tipoAvaliacaoIndx = currentCell.getColumnIndex();
+                        }
+
+                        if(currentCell.getStringCellValue().equalsIgnoreCase(data)) {
+                            dataIndx = currentCell.getColumnIndex();
+                        }
+
+                        if(currentCell.getStringCellValue().equalsIgnoreCase(status)) {
+                            statusIndx = currentCell.getColumnIndex();
+                        }
+
+                        if(currentCell.getStringCellValue().equalsIgnoreCase(nota)) {
+                            notaIndx = currentCell.getColumnIndex();
+                        }
+
+                        if(currentCell.getStringCellValue().equalsIgnoreCase(resultado)) {
+                            resultadoIndx = currentCell.getColumnIndex();
+                        }
+
+                        cellIdx++;
+                    }
                     rowNumber++;
                     continue;
                 }
 
-                Iterator<Cell> cellsInRow = currentRow.iterator();
-
                 Avaliacao avaliacao = new Avaliacao();
                 Colaborador colaborador = new Colaborador();
 
-                int cellIdx = 0;
-                while (cellsInRow.hasNext()) {
-                    Cell currentCell = cellsInRow.next();
+                avaliacao.setColaborador(colaborador);
+                avaliacao.getColaborador().setNome(currentRow.getCell(nomeIndx, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue());
+                avaliacao.getColaborador().setSigla(currentRow.getCell(siglaIndx, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue());
 
+                switch (currentRow.getCell(tipoAvaliacaoIndx, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue()) {
+                    case "1:1":
+                    case "AD":
+                    case "1-on-1":
+                        avaliacao.setTipoAvaliacao(TipoAvaliacao.ONE_TO_ONE);
+                        break;
 
-                    switch (cellIdx) {
-                        case 0:
-                            avaliacao.setColaborador(colaborador);
-                            avaliacao.getColaborador().setNome(currentCell.getStringCellValue());
-                            break;
+                    case "Informal":
+                        avaliacao.setTipoAvaliacao(TipoAvaliacao.INFORMAL);
+                        break;
 
-                        case 1:
-                            avaliacao.setColaborador(colaborador);
-                            avaliacao.getColaborador().setSigla(currentCell.getStringCellValue());
-                            break;
+                    case "Experiência 45d":
+                        avaliacao.setTipoAvaliacao(TipoAvaliacao.EXPERIENCIA45D);
+                        break;
 
-                        case 2:
-                            switch (currentCell.getStringCellValue()) {
-                                case "1:1":
-                                case "AD":
-                                case "1-on-1":
-                                    avaliacao.setTipoAvaliacao(TipoAvaliacao.ONE_TO_ONE);
-                                    break;
+                    case "Experiência 90d":
+                        avaliacao.setTipoAvaliacao(TipoAvaliacao.EXPERIENCIA90D);
+                        break;
 
-                                case "Informal":
-                                    avaliacao.setTipoAvaliacao(TipoAvaliacao.INFORMAL);
-                                    break;
+                    case "Reconhecimento":
+                        avaliacao.setTipoAvaliacao(TipoAvaliacao.RECONHECIMENTO);
+                        break;
 
-                                case "Experiência 45d":
-                                    avaliacao.setTipoAvaliacao(TipoAvaliacao.EXPERIENCIA45D);
-                                    break;
+                    case "Formação":
+                        avaliacao.setTipoAvaliacao(TipoAvaliacao.FORMACAO);
+                        break;
 
-                                case "Experiência 90d":
-                                    avaliacao.setTipoAvaliacao(TipoAvaliacao.EXPERIENCIA90D);
-                                    break;
+                    default:
+                        break;
+                }
 
-                                case "Reconhecimento":
-                                    avaliacao.setTipoAvaliacao(TipoAvaliacao.RECONHECIMENTO);
-                                    break;
+                avaliacao.setData(currentRow.getCell(dataIndx, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getLocalDateTimeCellValue().toLocalDate());
 
-                                case "Formação":
-                                    avaliacao.setTipoAvaliacao(TipoAvaliacao.FORMACAO);
-                                    break;
-                            }
-                            break;
+                switch (currentRow.getCell(statusIndx,Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue()) {
+                    case "Novo":
+                        avaliacao.setStatus(Status.NOVO);
+                        break;
 
-                        case 3:
-                            avaliacao.setData(currentCell.getLocalDateTimeCellValue().toLocalDate());
-                            break;
+                    case "Agendado":
+                        avaliacao.setStatus(Status.AGENDADO);
+                        break;
 
-                        case 4:
-                            switch (currentCell.getStringCellValue()) {
-                                case "Novo":
-                                    avaliacao.setStatus(Status.NOVO);
-                                    break;
+                    case "Formalizar":
+                        avaliacao.setStatus(Status.FORMALIZAR);
+                        break;
 
-                                case "Agendado":
-                                    avaliacao.setStatus(Status.AGENDADO);
-                                    break;
+                    case "Em aprovação":
+                        avaliacao.setStatus(Status.EM_APROVACAO);
+                        break;
 
-                                case "Formalizar":
-                                    avaliacao.setStatus(Status.FORMALIZAR);
-                                    break;
+                    case "Finalizado":
+                        avaliacao.setStatus(Status.FINALIZADO);
+                        break;
 
-                                case "Em aprovação":
-                                    avaliacao.setStatus(Status.EM_APROVACAO);
-                                    break;
+                    case "Desligado":
+                        avaliacao.setStatus(Status.DESLIGADO);
+                        break;
 
-                                case "Finalizado":
-                                    avaliacao.setStatus(Status.FINALIZADO);
-                                    break;
+                    default:
+                        break;
+                }
 
-                                case "Desligado":
-                                    avaliacao.setStatus(Status.DESLIGADO);
-                                    break;
-                            }
-                            break;
+                avaliacao.setNota(new BigDecimal(currentRow.getCell(notaIndx,Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue()));
 
-                        case 5:
-                            avaliacao.setNota(new BigDecimal(currentCell.getStringCellValue()));
-                            break;
+                switch (currentRow.getCell(resultadoIndx,Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue()) {
+                    case "Mérito":
+                        avaliacao.setResultado(TipoResultado.MERITO);
+                        break;
 
-                        case 10:
-                            switch (currentCell.getStringCellValue()) {
-                                case "Mérito":
-                                    avaliacao.setResultado(TipoResultado.MERITO);
-                                    break;
+                    case "Promoção":
+                        avaliacao.setResultado(TipoResultado.PROMOCAO);
+                        break;
 
-                                case "Promoção":
-                                    avaliacao.setResultado(TipoResultado.PROMOCAO);
-                                    break;
+                    case "Adequação":
+                        avaliacao.setResultado(TipoResultado.ADEQUACAO);
+                        break;
 
-                                case "Adequação":
-                                    avaliacao.setResultado(TipoResultado.ADEQUACAO);
-                                    break;
+                    case "N/A":
+                        avaliacao.setResultado(TipoResultado.NA);
+                        break;
 
-                                case "N/A":
-                                    avaliacao.setResultado(TipoResultado.NA);
-                                    break;
-                            }
-                            break;
-
-                        default:
-                            break;
-                    }
-
-                    cellIdx++;
+                    default:
+                        break;
                 }
 
                 avaliacaoList.add(avaliacao);
