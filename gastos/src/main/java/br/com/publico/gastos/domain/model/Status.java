@@ -17,7 +17,7 @@ public enum Status {
         this.descricao = descricao;
     }
 
-    public static Status fromString(final Short id) {
+    public static Status fromShort(final Short id) {
         switch (id) {
             case 1:
                 return NOVO;

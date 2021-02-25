@@ -31,9 +31,9 @@ public interface AvaliacaoMapper {
         colaborador.setId(request.getColaborador());
 
         avaliacao.setColaborador(colaborador);
-        avaliacao.setTipoAvaliacao(TipoAvaliacao.fromString(request.getTipoAvaliacao()));
-        avaliacao.setResultado(TipoResultado.fromString(request.getResultado()));
-        avaliacao.setStatus(Status.fromString(request.getStatus()));
+        avaliacao.setTipoAvaliacao(TipoAvaliacao.fromShort(request.getTipoAvaliacao()));
+        avaliacao.setResultado(TipoResultado.fromShort(request.getResultado()));
+        avaliacao.setStatus(Status.fromShort(request.getStatus()));
         avaliacao.setData(request.getData());
         avaliacao.setNota(request.getNota());
 

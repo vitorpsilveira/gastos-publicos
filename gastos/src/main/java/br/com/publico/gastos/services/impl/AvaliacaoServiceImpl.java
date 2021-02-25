@@ -54,15 +54,15 @@ public class AvaliacaoServiceImpl implements AvaliacaoService {
         Avaliacao avaliacao = avaliacaoRepository.getOne(id);
 
         if (Objects.nonNull(avaliacaoRequest.getTipoAvaliacao())) {
-            avaliacao.setTipoAvaliacao(TipoAvaliacao.fromString(avaliacaoRequest.getTipoAvaliacao()));
+            avaliacao.setTipoAvaliacao(TipoAvaliacao.fromShort(avaliacaoRequest.getTipoAvaliacao()));
         }
 
         if (Objects.nonNull(avaliacaoRequest.getResultado())) {
-            avaliacao.setResultado(TipoResultado.fromString(avaliacaoRequest.getResultado()));
+            avaliacao.setResultado(TipoResultado.fromShort(avaliacaoRequest.getResultado()));
         }
 
         if (Objects.nonNull(avaliacaoRequest.getStatus())) {
-            avaliacao.setStatus(Status.fromString(avaliacaoRequest.getStatus()));
+            avaliacao.setStatus(Status.fromShort(avaliacaoRequest.getStatus()));
         }
 
         if (Objects.nonNull(avaliacaoRequest.getData())) {
