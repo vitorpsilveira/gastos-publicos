@@ -15,10 +15,11 @@ public interface AvaliacaoMapper {
     default AvaliacaoResponse avaliacaoEntityToResponse(Avaliacao avaliacao) {
         AvaliacaoResponse avaliacaoResponse = new AvaliacaoResponse();
 
-        avaliacaoResponse.setIdColaborador(avaliacao.getColaborador().getId());
-        avaliacaoResponse.setTipoAvaliacao(avaliacao.getTipoAvaliacao());
-        avaliacaoResponse.setResultado(avaliacao.getResultado());
-        avaliacaoResponse.setStatus(avaliacao.getStatus());
+        avaliacaoResponse.setId(avaliacao.getId());
+        avaliacaoResponse.setColaborador(avaliacao.getColaborador());
+        avaliacaoResponse.setTipoAvaliacao(avaliacao.getTipoAvaliacao().getDescricao());
+        avaliacaoResponse.setResultado(avaliacao.getResultado().getDescricao());
+        avaliacaoResponse.setStatus(avaliacao.getStatus().getDescricao());
         avaliacaoResponse.setData(avaliacao.getData().toString());
         avaliacaoResponse.setNota(avaliacao.getNota());
 
