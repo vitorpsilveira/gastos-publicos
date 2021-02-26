@@ -5,6 +5,7 @@ import br.com.publico.gastos.ExcelHelper;
 import br.com.publico.gastos.domain.dto.response.MensagemResponse;
 import br.com.publico.gastos.domain.model.Avaliacao;
 import br.com.publico.gastos.services.AvaliacaoService;
+import br.com.publico.gastos.services.ValidacoesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,11 @@ public class AvaliacaoController {
     @Autowired
     private AvaliacaoService avaliacaoService;
 
+    @Autowired
+    private ValidacoesService validacoesService;
+
     @PostMapping("/upload")
+    @ApiOperation(value = "Importação de avaliações por Xlsx")
     public ResponseEntity<MensagemResponse> uploadFile(@RequestParam("file") MultipartFile file) {
         String mensagem = "";
 

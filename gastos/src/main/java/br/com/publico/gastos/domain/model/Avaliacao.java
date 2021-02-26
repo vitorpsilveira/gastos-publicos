@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @Builder
 public class Avaliacao extends EntityBase {
 
-    @ManyToOne(optional = false, cascade = CascadeType.PERSIST)
+    @ManyToOne(optional = false)
     @JoinColumn(name = "colaborador_id", nullable = false)
     @NotNull(message = "O colaborador é obrigatório")
     private Colaborador colaborador;
