@@ -1,5 +1,6 @@
 package br.com.publico.gastos.domain.dto.response;
 
+import br.com.publico.gastos.domain.model.Colaborador;
 import br.com.publico.gastos.domain.model.Status;
 import br.com.publico.gastos.domain.model.TipoAvaliacao;
 import br.com.publico.gastos.domain.model.TipoResultado;
@@ -12,10 +13,11 @@ import java.math.BigDecimal;
 @Setter
 public class AvaliacaoResponse {
 
-    private Long idColaborador;
-    private TipoAvaliacao tipoAvaliacao;
-    private TipoResultado resultado;
-    private Status status;
+    private Long id;
+    private Colaborador colaborador;
+    private String tipoAvaliacao;
+    private String resultado;
+    private String status;
     private String data;
     private BigDecimal nota;
 }
