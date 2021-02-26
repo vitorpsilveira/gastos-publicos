@@ -1,10 +1,7 @@
 package br.com.publico.gastos;
 
 import br.com.publico.gastos.domain.model.*;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,10 +18,7 @@ public class ExcelHelper {
     static String SHEET = "Carreiras";
 
     public static boolean hasExcelFormat(MultipartFile file) {
-        if (!TYPE.equals(file.getContentType())) {
-            return false;
-        }
-        return true;
+        return TYPE.equals(file.getContentType());
     }
 
     public static List<Avaliacao> excelToAvaliacao(InputStream is) {
@@ -34,7 +28,7 @@ public class ExcelHelper {
             Sheet sheet = workbook.getSheet(SHEET);
             Iterator<Row> rows = sheet.iterator();
 
-            List<Avaliacao> avaliacaoList = new ArrayList<Avaliacao>();
+            List<Avaliacao> avaliacaoList = new ArrayList<>();
 
             String nome = "Nome";
             int nomeIndx = 0;
@@ -169,7 +163,18 @@ public class ExcelHelper {
                         break;
                 }
 
+                CellType tipoCelula = currentRow.getCell(notaIndx).getCellType();
+                if (tipoCelula == CellType.STRING) {
+
                 avaliacao.setNota(new BigDecimal(currentRow.getCell(notaIndx,Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue()));
+
+                }
+
+                if (tipoCelula == CellType.NUMERIC) {
+
+                    avaliacao.setNota(BigDecimal.valueOf(currentRow.getCell(notaIndx, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getNumericCellValue()));
+
+                }
 
                 switch (currentRow.getCell(resultadoIndx,Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getStringCellValue()) {
                     case "Mérito":
