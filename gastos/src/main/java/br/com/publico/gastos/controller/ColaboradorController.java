@@ -16,12 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -80,7 +80,7 @@ public class ColaboradorController {
     @ApiOperation(value = "Obter dados do gráfico das avaliações")
     @ApiResponses(value = { @ApiResponse(code = SwaggerApiStatusCode.CODE_200, message = "Dados das avaliações encontrados"),
             @ApiResponse(code = SwaggerApiStatusCode.CODE_400, message = SwaggerApiMessage.REQUISICAO_INVALIDA, response = Problema.class)})
-    public ResponseEntity<List<GraficoAvaliacoesResponse>> grafico(@ModelAttribute List<Long> idColaboradores) {
+    public ResponseEntity<List<GraficoAvaliacoesResponse>> grafico(@RequestParam(name = "id") List<Long> idColaboradores) {
         return ResponseEntity.ok(colaboradorService.obterInformacoesGrafico(idColaboradores));
     }
 }
