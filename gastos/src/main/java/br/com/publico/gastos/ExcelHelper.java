@@ -1,8 +1,14 @@
 package br.com.publico.gastos;
 
+
 import br.com.publico.gastos.domain.model.*;
+import br.com.publico.gastos.services.ValidacoesService;
+import br.com.publico.gastos.services.exception.ColaboradorPossuiAvaliacaoException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.checkerframework.checker.index.qual.SearchIndexBottom;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -12,16 +18,23 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+@Service
 public class ExcelHelper {
+
+
+    @Autowired
+    private ValidacoesService validacoesService;
+
     public static String TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
     static String[] HEADERs = {"Nome", "Sigla", "Tipo Avaliação", "Data", "Status", "Nota", "Resultado"};
     static String SHEET = "Carreiras";
+
 
     public static boolean hasExcelFormat(MultipartFile file) {
         return TYPE.equals(file.getContentType());
     }
 
-    public static List<Avaliacao> excelToAvaliacao(InputStream is) {
+    public List<Avaliacao> excelToAvaliacao(InputStream is) {
         try {
             Workbook workbook = new XSSFWorkbook(is);
 
@@ -197,7 +210,11 @@ public class ExcelHelper {
                         break;
                 }
 
-                avaliacaoList.add(avaliacao);
+                if (!validacoesService.verificaAvaliacaoExistente(avaliacao.getColaborador().getNome(), avaliacao.getColaborador().getSigla(), avaliacao.getData())) {
+                    avaliacaoList.add(avaliacao);
+                } else {
+                    throw new ColaboradorPossuiAvaliacaoException(avaliacao.getData().getMonthValue());
+                }
             }
 
             workbook.close();
