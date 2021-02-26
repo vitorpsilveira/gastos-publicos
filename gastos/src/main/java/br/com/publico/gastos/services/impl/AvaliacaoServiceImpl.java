@@ -1,22 +1,28 @@
 package br.com.publico.gastos.services.impl;
 
+
+import br.com.publico.gastos.ExcelHelper;
+import br.com.publico.gastos.domain.model.Avaliacao;
+import br.com.publico.gastos.repository.AvaliacaoRepository;
+import br.com.publico.gastos.services.AvaliacaoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
+
 import br.com.publico.gastos.controller.request.AvaliacaoRequest;
 import br.com.publico.gastos.controller.request.AvaliacaoUpdateRequest;
 import br.com.publico.gastos.domain.dto.mapper.AvaliacaoMapper;
 import br.com.publico.gastos.domain.dto.response.AvaliacaoResponse;
-import br.com.publico.gastos.domain.model.Avaliacao;
 import br.com.publico.gastos.domain.model.Status;
 import br.com.publico.gastos.domain.model.TipoAvaliacao;
 import br.com.publico.gastos.domain.model.TipoResultado;
-import br.com.publico.gastos.repository.AvaliacaoRepository;
-import br.com.publico.gastos.services.AvaliacaoService;
 import br.com.publico.gastos.services.exception.ColaboradorPossuiAvaliacaoException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -28,6 +34,23 @@ public class AvaliacaoServiceImpl implements AvaliacaoService {
 
     @Autowired
     private AvaliacaoMapper avaliacaoMapper;
+
+    @Override
+    public void save(MultipartFile file) {
+
+        try {
+            final List<Avaliacao> avaliacaoList = ExcelHelper.excelToAvaliacao(file.getInputStream());
+            avaliacaoRepository.saveAll(avaliacaoList);
+        } catch (IOException e) {
+            throw new RuntimeException("Falha ao armazenar dados do Excel: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Avaliacao> getAllAvaliacoes() {
+        return avaliacaoRepository.findAll();
+    }
+
 
     private Boolean existeAvaliacaoMesColaborador(Long idColaborador, LocalDate data) {
         LocalDate dataInicial = LocalDate.now().withMonth(data.getMonthValue()).with(TemporalAdjusters.firstDayOfMonth());
@@ -44,8 +67,7 @@ public class AvaliacaoServiceImpl implements AvaliacaoService {
 
         if (!existeAvaliacaoMesColaborador(avaliacao.getColaborador().getId(), avaliacaoRequest.getData())) {
             avaliacaoRepository.save(avaliacao);
-        }
-        else {
+        } else {
             throw new ColaboradorPossuiAvaliacaoException(avaliacaoRequest.getData().getMonthValue());
         }
     }

@@ -1,21 +1,25 @@
 package br.com.publico.gastos.domain.model;
 
 import br.com.publico.gastos.domain.model.base.EntityBase;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "avaliacao")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Avaliacao extends EntityBase {
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "colaborador_id", nullable = false)
     @NotNull(message = "O colaborador é obrigatório")
     private Colaborador colaborador;

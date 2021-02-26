@@ -1,6 +1,7 @@
 package br.com.publico.gastos.domain.model;
 
 import br.com.publico.gastos.domain.model.base.EntityBase;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +33,7 @@ public class Colaborador extends EntityBase {
     private String sigla;
 
     @OneToMany(mappedBy = "colaborador")
+    @JsonIgnore
     private List<Avaliacao> avaliacoes;
 
 }
