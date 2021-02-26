@@ -67,9 +67,9 @@ public class ColaboradorController {
 
     @DeleteMapping("{colaboradorId}")
     @ApiOperation(value = "Deletar usuário se não houver associações vinculadas a ele")
-    @ApiResponses(value = { @ApiResponse(code = SwaggerApiStatusCode.CODE_200, message = "Deletado com sucesso e retornar status 204"),
+    @ApiResponses(value = { @ApiResponse(code = SwaggerApiStatusCode.CODE_204, message = "Deletado com sucesso e retornar status 204"),
         @ApiResponse(code = SwaggerApiStatusCode.CODE_400, message = SwaggerApiMessage.REQUISICAO_INVALIDA, response = Problema.class)})
-    public ResponseEntity deletar(@PathVariable Long colaboradorId) {
+    public ResponseEntity<Void> deletar(@PathVariable Long colaboradorId) {
         colaboradorService.deletar(colaboradorId);
         return ResponseEntity.noContent().build();
     }

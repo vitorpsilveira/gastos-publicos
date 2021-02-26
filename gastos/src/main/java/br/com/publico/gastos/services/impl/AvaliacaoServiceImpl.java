@@ -5,6 +5,8 @@ import br.com.publico.gastos.ExcelHelper;
 import br.com.publico.gastos.domain.model.Avaliacao;
 import br.com.publico.gastos.repository.AvaliacaoRepository;
 import br.com.publico.gastos.services.AvaliacaoService;
+import br.com.publico.gastos.services.exception.EntidadeNaoEncontradaException;
+import br.com.publico.gastos.services.message.ValidationMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +23,7 @@ import br.com.publico.gastos.domain.model.TipoAvaliacao;
 import br.com.publico.gastos.domain.model.TipoResultado;
 import br.com.publico.gastos.services.exception.ColaboradorPossuiAvaliacaoException;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Objects;
@@ -108,5 +111,16 @@ public class AvaliacaoServiceImpl implements AvaliacaoService {
         return avaliacaoRepository.findAll()
                 .stream().map(avaliacaoMapper::avaliacaoEntityToResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void deletar(Long avaliacaoId) {
+        var avaliacaoOptional = avaliacaoRepository.findById(avaliacaoId);
+        if (avaliacaoOptional.isEmpty()) {
+            throw new EntidadeNaoEncontradaException(ValidationMessage.AVALICAO_NAO_ENCONTRADA, avaliacaoId);
+        }
+        var avaliacao = avaliacaoOptional.get();
+        avaliacaoRepository.delete(avaliacao);
     }
 }
