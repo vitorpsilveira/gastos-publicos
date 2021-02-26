@@ -10,7 +10,6 @@ import br.com.publico.gastos.domain.model.*;
 import br.com.publico.gastos.repository.AvaliacaoRepository;
 import br.com.publico.gastos.repository.ColaboradorRepository;
 import br.com.publico.gastos.services.AvaliacaoService;
-import br.com.publico.gastos.services.exception.ColaboradorPossuiAvaliacaoException;
 import br.com.publico.gastos.services.exception.EntidadeNaoEncontradaException;
 import br.com.publico.gastos.services.message.ValidationMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +18,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.List;
+
+import br.com.publico.gastos.controller.request.AvaliacaoRequest;
+import br.com.publico.gastos.controller.request.AvaliacaoUpdateRequest;
+import br.com.publico.gastos.domain.dto.mapper.AvaliacaoMapper;
+import br.com.publico.gastos.domain.dto.response.AvaliacaoResponse;
+import br.com.publico.gastos.domain.model.Status;
+import br.com.publico.gastos.domain.model.TipoAvaliacao;
+import br.com.publico.gastos.domain.model.TipoResultado;
+import br.com.publico.gastos.services.exception.ColaboradorPossuiAvaliacaoException;
+
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
@@ -151,5 +162,16 @@ public class AvaliacaoServiceImpl implements AvaliacaoService {
         return avaliacaoRepository.findAll()
                 .stream().map(avaliacaoMapper::avaliacaoEntityToResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void deletar(Long avaliacaoId) {
+        var avaliacaoOptional = avaliacaoRepository.findById(avaliacaoId);
+        if (avaliacaoOptional.isEmpty()) {
+            throw new EntidadeNaoEncontradaException(ValidationMessage.AVALICAO_NAO_ENCONTRADA, avaliacaoId);
+        }
+        var avaliacao = avaliacaoOptional.get();
+        avaliacaoRepository.delete(avaliacao);
     }
 }

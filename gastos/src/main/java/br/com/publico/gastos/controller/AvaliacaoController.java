@@ -95,4 +95,13 @@ public class AvaliacaoController {
         avaliacaoService.atualizar(id, avaliacao);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    @DeleteMapping("{avaliacaoId}")
+    @ApiOperation(value = "Deletar avaliação")
+    @ApiResponses(value = { @ApiResponse(code = SwaggerApiStatusCode.CODE_204, message = "Deletado com sucesso e retornar status 204"),
+            @ApiResponse(code = SwaggerApiStatusCode.CODE_400, message = SwaggerApiMessage.REQUISICAO_INVALIDA, response = Problema.class)})
+    public ResponseEntity<Void> deletar(@PathVariable Long avaliacaoId) {
+        avaliacaoService.deletar(avaliacaoId);
+        return ResponseEntity.noContent().build();
+    }
 }
