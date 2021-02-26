@@ -6,6 +6,7 @@ import br.com.publico.gastos.controller.swagger.SwaggerApiMessage;
 import br.com.publico.gastos.controller.swagger.SwaggerApiStatusCode;
 import br.com.publico.gastos.domain.dto.mapper.ColaboradorMapper;
 import br.com.publico.gastos.domain.dto.response.ColaboradorResponse;
+import br.com.publico.gastos.domain.dto.response.GraficoAvaliacoesResponse;
 import br.com.publico.gastos.repository.ColaboradorRepository;
 import br.com.publico.gastos.services.ColaboradorService;
 import io.swagger.annotations.ApiOperation;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -72,5 +74,13 @@ public class ColaboradorController {
     public ResponseEntity<Void> deletar(@PathVariable Long colaboradorId) {
         colaboradorService.deletar(colaboradorId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/grafico")
+    @ApiOperation(value = "Obter dados do gráfico das avaliações")
+    @ApiResponses(value = { @ApiResponse(code = SwaggerApiStatusCode.CODE_200, message = "Dados das avaliações encontrados"),
+            @ApiResponse(code = SwaggerApiStatusCode.CODE_400, message = SwaggerApiMessage.REQUISICAO_INVALIDA, response = Problema.class)})
+    public ResponseEntity<List<GraficoAvaliacoesResponse>> grafico(@ModelAttribute List<Long> idColaboradores) {
+        return ResponseEntity.ok(colaboradorService.obterInformacoesGrafico(idColaboradores));
     }
 }

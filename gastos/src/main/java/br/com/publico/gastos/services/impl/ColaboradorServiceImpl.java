@@ -2,6 +2,7 @@ package br.com.publico.gastos.services.impl;
 
 import br.com.publico.gastos.controller.request.ColaboradorRequest;
 import br.com.publico.gastos.domain.dto.mapper.ColaboradorMapper;
+import br.com.publico.gastos.domain.dto.response.GraficoAvaliacoesResponse;
 import br.com.publico.gastos.repository.ColaboradorRepository;
 import br.com.publico.gastos.services.ColaboradorService;
 import br.com.publico.gastos.services.exception.ColaboradorPossuiAvaliacaoException;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -87,5 +89,10 @@ public class ColaboradorServiceImpl implements ColaboradorService {
             throw new ColaboradorPossuiAvaliacaoException(colaborador.getNome());
         }
         repository.delete(colaborador);
+    }
+
+    @Override
+    public List<GraficoAvaliacoesResponse> obterInformacoesGrafico(List<Long> idColaboradores) {
+        return repository.findByIdIn(idColaboradores);
     }
 }
