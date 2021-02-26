@@ -21,4 +21,6 @@ public interface AvaliacaoService {
     void atualizar(Long id, AvaliacaoUpdateRequest avaliacao);
 
     List<AvaliacaoResponse> buscarAvaliacoes();
+
+    void deletar(Long avaliacaoId);
 }
