@@ -12,5 +12,5 @@ public interface AvaliacaoRepository extends JpaRepository<Avaliacao, Long> {
 
     List<Avaliacao> findByColaboradorNomeAndColaboradorSiglaAndDataBetween(String nomeColaborador, String siglaColaborador, LocalDate dataInicial, LocalDate dataFinal);
 
-    List<Avaliacao> findByColaboradorId(Long id);
+    List<Avaliacao> findByColaboradorIdOrderByData(Long id);
 }

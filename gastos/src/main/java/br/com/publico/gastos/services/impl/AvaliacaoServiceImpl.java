@@ -173,6 +173,6 @@ public class AvaliacaoServiceImpl implements AvaliacaoService {
 
     @Override
     public List<Avaliacao> buscarAvaliacoesPorIdColaborador(Long id) {
-        return avaliacaoRepository.findByColaboradorId(id);
+        return avaliacaoRepository.findByColaboradorIdOrderByData(id);
     }
 }

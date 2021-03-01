@@ -19,10 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
-import java.time.format.TextStyle;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
@@ -118,15 +115,10 @@ public class ColaboradorServiceImpl implements ColaboradorService {
         AvaliacaoDTO avaliacaoDTO = new AvaliacaoDTO();
 
         avaliacaoDTO.setId(avaliacao.getId());
-        avaliacaoDTO.setMesAno(formataMesAnoAvaliacao(avaliacao.getData()));
+        avaliacaoDTO.setMesAno(avaliacao.getData().getMonthValue() + "/" + avaliacao.getData().getYear());
         avaliacaoDTO.setNota(avaliacao.getNota());
         avaliacaoDTO.setResultado(avaliacao.getResultado().getDescricao());
 
         return avaliacaoDTO;
-    }
-
-    private String formataMesAnoAvaliacao(LocalDate data) {
-        Locale brasil = new Locale("pt", "BR");
-        return data.getMonth().getDisplayName(TextStyle.SHORT, brasil).concat("/").concat(Integer.toString(data.getYear()));
     }
 }
