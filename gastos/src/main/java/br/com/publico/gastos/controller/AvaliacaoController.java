@@ -73,14 +73,14 @@ public class AvaliacaoController {
     }
 
     @GetMapping
-    @ApiOperation(value = "Buscar todos os colaboradores")
+    @ApiOperation(value = "Buscar todas as avaliações")
     public List<AvaliacaoResponse> getAll() {
         return avaliacaoService.buscarAvaliacoes();
     }
 
     @PostMapping
     @ApiOperation(value = "Salvar avaliação")
-    @ApiResponses(value = { @ApiResponse(code = SwaggerApiStatusCode.CODE_200, message = "Salvar e retornar status 200"),
+    @ApiResponses(value = { @ApiResponse(code = SwaggerApiStatusCode.CODE_201, message = "Salvar e retornar status 201"),
             @ApiResponse(code = SwaggerApiStatusCode.CODE_400, message = SwaggerApiMessage.REQUISICAO_INVALIDA, response = Problema.class)})
     public ResponseEntity<Void> save(@RequestBody @Valid AvaliacaoRequest avaliacao) {
         avaliacaoService.salvar(avaliacao);
