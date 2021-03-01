@@ -50,18 +50,13 @@ public class AvaliacaoController {
         String mensagem = "";
 
         if (ExcelHelper.hasExcelFormat(file)) {
-            try {
-                avaliacaoService.save(file);
+            avaliacaoService.save(file);
 
                 mensagem = "Arquivo recebido com sucesso: " + file.getOriginalFilename();
                 return  ResponseEntity.status(HttpStatus.OK).body(new MensagemResponse(mensagem));
-            } catch (Exception e) {
-                mensagem = "Não foi possivel subir o arquivo: " + file.getOriginalFilename() + "!";
-                return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new MensagemResponse(mensagem));
-            }
         }
 
-        mensagem = "Por favor, adicione um arquivo Excel!";
+        mensagem = "Por favor, selecione um arquivo Excel! Formato .xlsx.";
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MensagemResponse(mensagem));
     }
 
