@@ -4,6 +4,7 @@ package br.com.publico.gastos;
 import br.com.publico.gastos.domain.model.*;
 import br.com.publico.gastos.services.ValidacoesService;
 import br.com.publico.gastos.services.exception.ColaboradorPossuiAvaliacaoException;
+import br.com.publico.gastos.services.exception.DomainException;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.checkerframework.checker.index.qual.SearchIndexBottom;
@@ -106,6 +107,7 @@ public class ExcelHelper {
                     rowNumber++;
                     continue;
                 }
+                rowNumber++;
 
                 Avaliacao avaliacao = new Avaliacao();
                 Colaborador colaborador = new Colaborador();
@@ -142,7 +144,8 @@ public class ExcelHelper {
                         break;
 
                     default:
-                        break;
+                        throw new DomainException("Linha " +  rowNumber + ": Tipo de Avaliação difere do esperado: 1:1/AD/1-on-1, Experiência 45d," +
+                                " Experiência 90d, Reconhecimento ou Formação");
                 }
 
                 avaliacao.setData(currentRow.getCell(dataIndx, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK).getLocalDateTimeCellValue().toLocalDate());
@@ -173,7 +176,7 @@ public class ExcelHelper {
                         break;
 
                     default:
-                        break;
+                        throw new DomainException("Linha " +  rowNumber + ": Status difere do esperado: Novo, Agendado, Formalizar, Em aprovação, Finalizado ou Desligado");
                 }
 
                 CellType tipoCelula = currentRow.getCell(notaIndx).getCellType();
@@ -207,13 +210,15 @@ public class ExcelHelper {
                         break;
 
                     default:
-                        break;
+                        throw new DomainException("Linha " +  rowNumber + ": Resultado difere do esperado: Mérito, Promoção, Adequação ou N/A");
                 }
+
+
 
                 if (!validacoesService.verificaAvaliacaoExistente(avaliacao.getColaborador().getNome(), avaliacao.getColaborador().getSigla(), avaliacao.getData())) {
                     avaliacaoList.add(avaliacao);
                 } else {
-                    throw new ColaboradorPossuiAvaliacaoException(avaliacao.getData().getMonthValue());
+                    throw new ColaboradorPossuiAvaliacaoException(rowNumber, avaliacao.getColaborador().getNome(), avaliacao.getData().getMonthValue());
                 }
             }
 
