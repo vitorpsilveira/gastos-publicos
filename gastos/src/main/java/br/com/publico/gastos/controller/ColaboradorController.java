@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,11 +52,11 @@ public class ColaboradorController {
 
     @PostMapping
     @ApiOperation(value = "Salvar colaborador")
-    @ApiResponses(value = { @ApiResponse(code = SwaggerApiStatusCode.CODE_200, message = "Salvar e retornar status 200"),
+    @ApiResponses(value = { @ApiResponse(code = SwaggerApiStatusCode.CODE_201, message = "Salvar e retornar status 201"),
         @ApiResponse(code = SwaggerApiStatusCode.CODE_400, message = SwaggerApiMessage.REQUISICAO_INVALIDA, response = Problema.class)})
     public ResponseEntity<?> salvar(@RequestBody @Valid ColaboradorRequest request) {
         colaboradorService.salvar(request);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PatchMapping("{colaboradorId}")

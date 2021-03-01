@@ -1,6 +1,9 @@
 package br.com.publico.gastos.domain.model;
 
 import br.com.publico.gastos.domain.model.base.EntityBase;
+import br.com.publico.gastos.domain.model.converter.StatusConverter;
+import br.com.publico.gastos.domain.model.converter.TipoAvaliacaoConverter;
+import br.com.publico.gastos.domain.model.converter.TipoResultadoConverter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,14 +27,15 @@ public class Avaliacao extends EntityBase {
     @NotNull(message = "O colaborador é obrigatório")
     private Colaborador colaborador;
 
-    @Enumerated(EnumType.STRING)
+
+    @Convert(converter = TipoAvaliacaoConverter.class)
     @NotNull(message = "O tipo da avalição é obrigatório")
     private TipoAvaliacao tipoAvaliacao;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = TipoResultadoConverter.class)
     private TipoResultado resultado;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = StatusConverter.class)
     private Status status;
 
     private LocalDate data;
