@@ -93,11 +93,18 @@ public class AvaliacaoServiceImpl implements AvaliacaoService {
     }
 
 
-    private Boolean existeAvaliacaoMesColaborador(Long idColaborador, LocalDate data) {
+    private Boolean existeAvaliacaoMesColaborador(Avaliacao avaliacao, LocalDate data) {
         LocalDate dataInicial = LocalDate.now().withMonth(data.getMonthValue()).with(TemporalAdjusters.firstDayOfMonth());
         LocalDate dataFinal = LocalDate.now().withMonth(data.getMonthValue()).with(TemporalAdjusters.lastDayOfMonth());
 
-        List<Avaliacao> avaliacoes = avaliacaoRepository.findByColaboradorIdAndDataBetween(idColaborador, dataInicial, dataFinal);
+        List<Avaliacao> avaliacoes;
+
+        if (Objects.nonNull(avaliacao.getId())) {
+            avaliacoes = avaliacaoRepository.findByColaboradorIdAndDataBetween(avaliacao.getColaborador().getId(), dataInicial, dataFinal, avaliacao.getId());
+        }
+        else {
+            avaliacoes = avaliacaoRepository.findByColaboradorIdAndDataBetween(avaliacao.getColaborador().getId(), dataInicial, dataFinal);
+        }
 
         return !avaliacoes.isEmpty();
     }
@@ -115,7 +122,7 @@ public class AvaliacaoServiceImpl implements AvaliacaoService {
 
         avaliacao.setColaborador(colaboradorRepository.findById(avaliacaoRequest.getColaborador()).get());
 
-        if (!existeAvaliacaoMesColaborador(avaliacao.getColaborador().getId(), avaliacaoRequest.getData())) {
+        if (!existeAvaliacaoMesColaborador(avaliacao, avaliacaoRequest.getData())) {
             avaliacaoRepository.save(avaliacao);
         } else {
             throw new ColaboradorPossuiAvaliacaoException(avaliacaoRequest.getData().getMonthValue());
@@ -138,7 +145,11 @@ public class AvaliacaoServiceImpl implements AvaliacaoService {
         }
 
         if (Objects.nonNull(avaliacaoRequest.getData())) {
-            avaliacao.setData(avaliacaoRequest.getData());
+            if (!existeAvaliacaoMesColaborador(avaliacao, avaliacaoRequest.getData())) {
+                avaliacao.setData(avaliacaoRequest.getData());
+            } else {
+                throw new ColaboradorPossuiAvaliacaoException(avaliacaoRequest.getData().getMonthValue());
+            }
         }
 
         if (Objects.nonNull(avaliacaoRequest.getNota())) {
