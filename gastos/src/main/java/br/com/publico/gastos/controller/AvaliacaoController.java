@@ -62,13 +62,6 @@ public class AvaliacaoController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MensagemResponse(mensagem));
     }
 
-    @GetMapping("/listar")
-    public ResponseEntity<List<Avaliacao>>  getAllAvaliacoes() {
-        List<Avaliacao> avaliacaoList = avaliacaoService.getAllAvaliacoes();
-
-        return new ResponseEntity<>(avaliacaoList, HttpStatus.OK);
-    }
-
     @GetMapping
     @ApiOperation(value = "Buscar todas as avaliações")
     public List<AvaliacaoResponse> getAll() {
@@ -101,4 +94,7 @@ public class AvaliacaoController {
         avaliacaoService.deletar(avaliacaoId);
         return ResponseEntity.noContent().build();
     }
+
+
+
 }
