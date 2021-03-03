@@ -74,10 +74,11 @@ public class AvaliacaoServiceImpl implements AvaliacaoService {
                 colaboradorRepository.saveAll(colaboradoresExcel);
             } else {
                 for(Colaborador colaboradores : colaboradoresExcel){
-                    if(colaboradorRepository.findBySigla(colaboradores.getSigla()).isEmpty()) {
-                        colaboradorRepository.save(colaboradores);
+                    for(Colaborador sigla : colaboradoresSiglasExistentes) {
+                        if(!colaboradores.getSigla().equals(sigla.getSigla())){
+                            colaboradorRepository.save(colaboradores);
+                        }
                     }
-
                 }
             }
 
